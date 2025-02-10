@@ -31,7 +31,7 @@ vector<MitreTeknik> csvYukle(const string& dosyaAdi) {
     string satir;
 
     if (!dosya.is_open()) {
-        cerr << "Dosya açılamadı!" << endl;
+        cerr << "Dosya acilamadi!" << endl;
         return teknikler;
     }
 
@@ -74,18 +74,18 @@ void teknikAra(const vector<MitreTeknik>& teknikler, const string& arama) {
         transform(ad.begin(), ad.end(), ad.begin(), ::tolower);
 
         if (kimlik == arama_kucuk || ad == arama_kucuk) {
-            cout << "Teknik Kimliği: " << teknik.kimlik << endl;
+            cout << "Teknik Kimligi: " << teknik.kimlik << endl;
             cout << "Ad: " << teknik.ad << endl;
-            cout << "Aşama: " << teknik.asama << endl;
-            cout << "Açıklama: " << teknik.aciklama << endl;
+            cout << "Asama: " << teknik.asama << endl;
+            cout << "Aciklama: " << teknik.aciklama << endl;
             cout << "URL: " << teknik.url << endl;
             cout << "Platformlar: " << teknik.platformlar << endl;
-            cout << "Zincir Aşamaları: " << teknik.zincir_asamalari << endl;
-            cout << "Veri Kaynakları: " << teknik.veri_kaynaklari << endl;
+            cout << "Zincir Asamalari: " << teknik.zincir_asamalari << endl;
+            cout << "Veri Kaynaklari: " << teknik.veri_kaynaklari << endl;
             return;
         }
     }
-    cout << "Bu kimlik veya isimle eşleşen bir teknik bulunamadı." << endl;
+    cout << "Bu kimlik veya isimle eslesen bir teknik bulunamadi." << endl;
 }
 
 int main() {
@@ -93,12 +93,12 @@ int main() {
     vector<MitreTeknik> teknikler = csvYukle(dosyaAdi);
 
     if (teknikler.empty()) {
-        cerr << "CSV dosyası yüklenemedi veya boş!" << endl;
+        cerr << "CSV dosyasi yuklenemedi!" << endl;
         return 1;
     }
 
     string arama;
-    cout << "MITRE Teknik Kimliği veya ismi girin: ";
+    cout << "MITRE Teknik Kimligi veya ismi girin: ";
     getline(cin, arama);
 
     teknikAra(teknikler, arama);
