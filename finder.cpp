@@ -85,7 +85,7 @@ void teknikAra(const vector<MitreTeknik>& teknikler, const string& arama) {
             return;
         }
     }
-    cout << "Bu kimlik veya isimle eslesen bir teknik bulunamadi." << endl;
+    cout << "Bu ID ile eslesen teknik bulunamadi." << endl;
 }
 
 int main() {
@@ -98,7 +98,7 @@ int main() {
     }
 
     string arama;
-    cout << "MITRE Teknik Kimligi veya ismi girin: ";
+    cout << "MITRE Teknik Kimligi girin: ";
     getline(cin, arama);
 
     teknikAra(teknikler, arama);
