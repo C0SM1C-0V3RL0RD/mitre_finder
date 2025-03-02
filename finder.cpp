@@ -7,101 +7,101 @@
 
 using namespace std;
 
-struct MitreTeknik {
-    string kimlik;
-    string ad;
-    string aciklama;
-    string asama;
+struct MitreTechnique {
+    string id;
+    string name;
+    string description;
+    string phase;
     string url;
-    string platformlar;
-    string zincir_asamalari;
-    string veri_kaynaklari;
+    string platforms;
+    string chain_phases;
+    string data_sources;
 };
 
-string temizle(const string& metin) {
-    size_t ilk = metin.find_first_not_of(" \t\n\r\"");
-    if (ilk == string::npos) return "";
-    size_t son = metin.find_last_not_of(" \t\n\r\"");
-    return metin.substr(ilk, son - ilk + 1);
+string clean(const string& text) {
+    size_t first = text.find_first_not_of(" \t\n\r\"");
+    if (first == string::npos) return "";
+    size_t last = text.find_last_not_of(" \t\n\r\"");
+    return text.substr(first, last - first + 1);
 }
 
-vector<MitreTeknik> csvYukle(const string& dosyaAdi) {
-    vector<MitreTeknik> teknikler;
-    ifstream dosya(dosyaAdi);
-    string satir;
+vector<MitreTechnique> loadCSV(const string& fileName) {
+    vector<MitreTechnique> techniques;
+    ifstream file(fileName);
+    string line;
 
-    if (!dosya.is_open()) {
-        cerr << "Dosya acilamadi!" << endl;
-        return teknikler;
+    if (!file.is_open()) {
+        cerr << "File could not be opened!" << endl;
+        return techniques;
     }
 
-    getline(dosya, satir);
-    while (getline(dosya, satir)) {
-        string ad, kimlik, url, asama, aciklama, platformlar, zincir_asamalari, veri_kaynaklari;
+    getline(file, line);
+    while (getline(file, line)) {
+        string name, id, url, phase, description, platforms, chain_phases, data_sources;
 
-        stringstream ss(satir);
-        getline(ss, ad, ',');
-        getline(ss, kimlik, ',');
+        stringstream ss(line);
+        getline(ss, name, ',');
+        getline(ss, id, ',');
         getline(ss, url, ',');
-        getline(ss, asama, ',');
-        getline(ss, aciklama, ',');
-        getline(ss, platformlar, ',');
-        getline(ss, zincir_asamalari, ',');
-        getline(ss, veri_kaynaklari, ',');
+        getline(ss, phase, ',');
+        getline(ss, description, ',');
+        getline(ss, platforms, ',');
+        getline(ss, chain_phases, ',');
+        getline(ss, data_sources, ',');
 
-        teknikler.push_back({
-            temizle(kimlik),
-            temizle(ad),
-            temizle(aciklama),
-            temizle(asama),
-            temizle(url),
-            temizle(platformlar),
-            temizle(zincir_asamalari),
-            temizle(veri_kaynaklari)
+        techniques.push_back({
+            clean(id),
+            clean(name),
+            clean(description),
+            clean(phase),
+            clean(url),
+            clean(platforms),
+            clean(chain_phases),
+            clean(data_sources)
             });
     }
-    dosya.close();
-    return teknikler;
+    file.close();
+    return techniques;
 }
 
-void teknikAra(const vector<MitreTeknik>& teknikler, const string& arama) {
-    string arama_kucuk = temizle(arama);
-    transform(arama_kucuk.begin(), arama_kucuk.end(), arama_kucuk.begin(), ::tolower);
+void searchTechnique(const vector<MitreTechnique>& techniques, const string& search) {
+    string search_lower = clean(search);
+    transform(search_lower.begin(), search_lower.end(), search_lower.begin(), ::tolower);
 
-    for (const auto& teknik : teknikler) {
-        string kimlik = teknik.kimlik, ad = teknik.ad;
-        transform(kimlik.begin(), kimlik.end(), kimlik.begin(), ::tolower);
-        transform(ad.begin(), ad.end(), ad.begin(), ::tolower);
+    for (const auto& technique : techniques) {
+        string id = technique.id, name = technique.name;
+        transform(id.begin(), id.end(), id.begin(), ::tolower);
+        transform(name.begin(), name.end(), name.begin(), ::tolower);
 
-        if (kimlik == arama_kucuk || ad == arama_kucuk) {
-            cout << "Teknik Kimligi: " << teknik.kimlik << endl;
-            cout << "Ad: " << teknik.ad << endl;
-            cout << "Asama: " << teknik.asama << endl;
-            cout << "Aciklama: " << teknik.aciklama << endl;
-            cout << "URL: " << teknik.url << endl;
-            cout << "Platformlar: " << teknik.platformlar << endl;
-            cout << "Zincir Asamalari: " << teknik.zincir_asamalari << endl;
-            cout << "Veri Kaynaklari: " << teknik.veri_kaynaklari << endl;
+        if (id == search_lower || name == search_lower) {
+            cout << "Technique ID: " << technique.id << endl;
+            cout << "Name: " << technique.name << endl;
+            cout << "Phase: " << technique.phase << endl;
+            cout << "Description: " << technique.description << endl;
+            cout << "URL: " << technique.url << endl;
+            cout << "Platforms: " << technique.platforms << endl;
+            cout << "Chain Phases: " << technique.chain_phases << endl;
+            cout << "Data Sources: " << technique.data_sources << endl;
             return;
         }
     }
-    cout << "Bu ID ile eslesen teknik bulunamadi." << endl;
+    cout << "No technique found with this ID." << endl;
 }
 
 int main() {
-    string dosyaAdi = "enterprise-attack.csv";
-    vector<MitreTeknik> teknikler = csvYukle(dosyaAdi);
+    string fileName = "enterprise-attack.csv";
+    vector<MitreTechnique> techniques = loadCSV(fileName);
 
-    if (teknikler.empty()) {
-        cerr << "CSV dosyasi yuklenemedi!" << endl;
+    if (techniques.empty()) {
+        cerr << "CSV file could not be loaded!" << endl;
         return 1;
     }
 
-    string arama;
-    cout << "MITRE Teknik Kimligi girin: ";
-    getline(cin, arama);
+    string search;
+    cout << "Enter MITRE Technique ID: ";
+    getline(cin, search);
 
-    teknikAra(teknikler, arama);
+    searchTechnique(techniques, search);
 
     return 0;
 }
